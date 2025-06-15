@@ -10,3 +10,11 @@ def kill_process(name):
             p.terminate()
             return True
     return False
+
+
+def is_process_running(name: str) -> bool:
+    """Check if a process with the given name is currently running."""
+    for p in psutil.process_iter(['name']):
+        if p.info['name'] == name:
+            return True
+    return False
