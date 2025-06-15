@@ -100,7 +100,7 @@ L'interface est une app Electron avec React (ou Vue/Svelte selon choix). Elle co
 | `npm run dev`           | Lance l’interface Electron en mode dev   |
 | `python appflow.py`     | Lance le backend Python                  |
 | `npm run build`         | Build l’interface pour prod              |
-| `npm run electron-pack` | Crée un exécutable desktop avec Electron |
+| `npm run electron-pack` | Créer un exécutable desktop avec Electron |
 
 ---
 
