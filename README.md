@@ -29,15 +29,15 @@ appflow/
 ├── main/                   # Backend principal (Python)
 │   ├── core/               # Gestion des règles, exécution des actions
 │   ├── utils/              # Fonctions système, process, logs
-│   └── appflow\.py          # Entrée principale du backend
+│   └── appflow.py          # Entrée principale du backend
 │
 ├── frontend/               # Interface Electron
-│   ├── public/             # Fichiers statiques
+│   ├── public/
+│   │   ├── rules/          # Fichiers YAML de règles utilisateur
+│   │   │   └── default.yaml
+│   │   └── index.html
 │   ├── src/                # App React/Vue/Svelte (selon choix)
 │   └── main.js             # Processus principal Electron
-│
-├── rules/                  # Fichiers YAML de règles utilisateur
-│   └── default.yaml
 │
 ├── assets/                 # Icônes, images
 ├── README.md
