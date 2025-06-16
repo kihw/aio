@@ -87,6 +87,11 @@ def main(argv=None):
         action="store_true",
         help="Check rules once and exit",
     )
+    parser.add_argument(
+        "--suggest",
+        action="store_true",
+        help="Analyze logs and output workflow suggestions",
+    )
     args = parser.parse_args(argv)
 
     rules = load_rules(profile=args.profile, rules_dir=args.rules_dir)
@@ -98,6 +103,18 @@ def main(argv=None):
 
     if args.run:
         rules = [r for r in rules if r.get("name") == args.run]
+
+    if args.suggest:
+        from utils.workflow_suggestions import generate_suggestions
+
+        suggestions = generate_suggestions(log_path=args.log)
+        if not suggestions:
+            print("No suggestions at this time.")
+        else:
+            print("Suggested workflows:")
+            for s in suggestions:
+                print(f"- {s}")
+        return
 
     engine = RuleEngine(
         rules,
