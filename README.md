@@ -78,6 +78,12 @@ L'interface est une app Electron avec React (ou Vue/Svelte selon choix). Elle co
 
 ---
 
+### Variables d'environnement utiles
+
+- `APPFLOW_RULES_DIR` : chemin vers le répertoire de règles par défaut.
+
+---
+
 ## 🧪 Exemple de règle YAML
 
 ```yaml
@@ -108,6 +114,10 @@ L'interface est une app Electron avec React (ou Vue/Svelte selon choix). Elle co
 | `python appflow.py --list` | Affiche les règles disponibles |
 | `python appflow.py --run "Nom"` | Exécute une règle précise |
 | `python appflow.py --log appflow.log` | Enregistre l'exécution dans un fichier |
+| `python appflow.py --profile work` | Charge aussi `default.yaml` puis les fichiers du profil `work` (alias `-p`) |
+| `python appflow.py --rules-dir ~/my_rules` | Charge les règles depuis un répertoire personnalisé (alias `-d`) |
+| `python appflow.py --interval 5` | Définit l'intervalle de polling en secondes (alias `-i`) |
+| `python appflow.py --once` | Exécute les règles une seule fois puis quitte (alias `-1`) |
 
 ---
 
