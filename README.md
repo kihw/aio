@@ -8,7 +8,7 @@
 ## 🧠 Fonctionnalités
 
 - Création de **règles intelligentes** basées sur :
-  - Heure, jour, batterie, activité réseau, ou lancement d'autres apps
+  - Heure, jour, batterie, **usage CPU**, **trafic réseau**, ou lancement d'autres apps
 - Détection et gestion des processus système
 - Interface utilisateur en **Electron**
 - Support des **profils d’usage** (travail, gaming, repos, etc.)
@@ -85,6 +85,8 @@ L'interface est une app Electron avec React (ou Vue/Svelte selon choix). Elle co
   triggers:
     - app_start: "code.exe"
     - battery_below: 20
+    - cpu_above: 80
+    - network_above: 100
     - at_time: "22:00"
   actions:
     - launch: "localhost_server.bat"

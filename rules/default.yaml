@@ -2,6 +2,8 @@
   triggers:
     - app_start: "example.exe"
     - at_time: "18:00"
+    - cpu_above: 80
+    - network_above: 100
   actions:
     - launch: "notepad.exe"
     - wait: 2
