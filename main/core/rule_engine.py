@@ -18,10 +18,11 @@ from utils.logger import log_event
 class RuleEngine:
     """Simple engine that evaluates rules and executes matching actions."""
 
-    def __init__(self, rules, poll_interval: float = 2.0, log_path=None):
+    def __init__(self, rules, poll_interval: float = 2.0, log_path=None, run_once: bool = False):
         self.rules = [Rule(r) for r in rules]
         self.poll_interval = poll_interval
         self.log_path = log_path
+        self.run_once = run_once
 
     def run(self):
         """Continuously check rules and execute them when triggers match."""
@@ -31,6 +32,8 @@ class RuleEngine:
                 for rule in self.rules:
                     if rule.check_triggers():
                         rule.execute(log_path=self.log_path)
+                if self.run_once:
+                    break
                 time.sleep(self.poll_interval)
         except KeyboardInterrupt:
             print("Rule engine stopped")
