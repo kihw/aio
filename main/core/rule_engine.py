@@ -4,7 +4,13 @@ import time
 import datetime
 import psutil
 
-from utils.system import is_process_running, get_battery_percent, send_notification
+from utils.system import (
+    is_process_running,
+    get_battery_percent,
+    get_cpu_percent,
+    get_network_bytes_per_sec,
+    send_notification,
+)
 
 
 
@@ -59,6 +65,14 @@ class Rule:
             if 'battery_below' in trig:
                 level = get_battery_percent()
                 if level is not None and level < float(trig['battery_below']):
+                    return True
+            if 'cpu_above' in trig:
+                cpu = get_cpu_percent(interval=0.1)
+                if cpu > float(trig['cpu_above']):
+                    return True
+            if 'network_above' in trig:
+                net = get_network_bytes_per_sec()
+                if net > float(trig['network_above']) * 1024:
                     return True
 
 
