@@ -5,7 +5,6 @@
     - cpu_above: 80
     - network_above: 100
   actions:
-    - launch: "notepad.exe"
+    - notify: "Workflow triggered"
     - wait: 2
-    - notify: "Notepad launched"
     - kill: "calc.exe"

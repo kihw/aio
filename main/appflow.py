@@ -8,7 +8,12 @@ import yaml
 from core.rule_engine import RuleEngine
 
 
-DEFAULT_RULES_DIR = Path(__file__).resolve().parent.parent / "rules"
+DEFAULT_RULES_DIR = (
+    Path(__file__).resolve().parent.parent
+    / "frontend"
+    / "public"
+    / "rules"
+)
 
 
 def load_rules(profile: str | None = None, rules_dir: Path | None = None) -> list[dict]:

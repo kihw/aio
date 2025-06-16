@@ -4,7 +4,7 @@ const { ipcRenderer } = require('electron');
 const yaml = require('js-yaml');
 
 function loadRules() {
-  const rulesDir = path.resolve(__dirname, '../../rules');
+  const rulesDir = path.resolve(__dirname, 'rules');
   const files = fs.readdirSync(rulesDir).filter(f => f.endsWith('.yaml'));
   const rules = [];
   for (const file of files) {

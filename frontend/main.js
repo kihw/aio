@@ -4,6 +4,7 @@ const path = require('path');
 
 // Try to pick a suitable Python executable on all platforms
 const PYTHON_BIN = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
+const RULES_DIR = path.join(__dirname, 'public', 'rules');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -21,7 +22,7 @@ let engineProcess = null;
 
 ipcMain.on('run-rule', (event, ruleName) => {
   const script = path.join(__dirname, '../main/appflow.py');
-  const child = spawn(PYTHON_BIN, [script, '--run', ruleName], {
+  const child = spawn(PYTHON_BIN, [script, '--run', ruleName, '--rules-dir', RULES_DIR], {
     detached: true,
     stdio: 'ignore'
   });
@@ -33,7 +34,13 @@ ipcMain.handle('start-engine', (event) => {
     return;
   }
   const script = path.join(__dirname, '../main/appflow.py');
-  engineProcess = spawn(PYTHON_BIN, [script, '--log', path.join(__dirname, '../appflow.log')]);
+  engineProcess = spawn(PYTHON_BIN, [
+    script,
+    '--log',
+    path.join(__dirname, '../appflow.log'),
+    '--rules-dir',
+    RULES_DIR,
+  ]);
   engineProcess.on('exit', () => {
     engineProcess = null;
     event.sender.send('engine-status-changed', false);
