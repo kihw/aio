@@ -2,6 +2,7 @@ import subprocess
 import psutil
 import sys
 
+
 def launch_process(cmd):
     return subprocess.Popen(cmd, shell=True)
 
@@ -19,7 +20,6 @@ def is_process_running(name: str) -> bool:
         if p.info['name'] == name:
             return True
     return False
-
 
 def get_battery_percent() -> float | None:
     """Return the current battery percentage or None if unavailable."""
@@ -47,3 +47,4 @@ def send_notification(message: str) -> None:
             print(f"[NOTIFY] {message}")
     except Exception:
         print(f"[NOTIFY] {message}")
+
