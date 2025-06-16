@@ -23,6 +23,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Run AppFlow rules")
     parser.add_argument("--list", action="store_true", help="List available rules")
     parser.add_argument("--run", metavar="RULE", help="Run a specific rule by name")
+    parser.add_argument("--log", metavar="FILE", help="Write execution log to FILE")
     args = parser.parse_args(argv)
 
     rules = load_rules()
@@ -35,7 +36,7 @@ def main(argv=None):
     if args.run:
         rules = [r for r in rules if r.get("name") == args.run]
 
-    engine = RuleEngine(rules)
+    engine = RuleEngine(rules, log_path=args.log)
     engine.run()
 
 
