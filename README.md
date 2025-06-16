@@ -107,6 +107,7 @@ L'interface est une app Electron avec React (ou Vue/Svelte selon choix). Elle co
 | `npm run electron-pack` | Créer un exécutable desktop avec Electron |
 | `python appflow.py --list` | Affiche les règles disponibles |
 | `python appflow.py --run "Nom"` | Exécute une règle précise |
+| `python appflow.py --log appflow.log` | Enregistre l'exécution dans un fichier |
 
 ---
 

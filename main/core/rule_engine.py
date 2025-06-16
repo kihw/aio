@@ -11,26 +11,31 @@ from utils.system import (
     get_network_bytes_per_sec,
     send_notification,
 )
+from utils.logger import log_event
 
 
 
 class RuleEngine:
     """Simple engine that evaluates rules and executes matching actions."""
 
-    def __init__(self, rules, poll_interval: float = 2.0):
+    def __init__(self, rules, poll_interval: float = 2.0, log_path=None):
         self.rules = [Rule(r) for r in rules]
         self.poll_interval = poll_interval
+        self.log_path = log_path
 
     def run(self):
         """Continuously check rules and execute them when triggers match."""
+        log_event("Rule engine started", self.log_path)
         try:
             while True:
                 for rule in self.rules:
                     if rule.check_triggers():
-                        rule.execute()
+                        rule.execute(log_path=self.log_path)
                 time.sleep(self.poll_interval)
         except KeyboardInterrupt:
             print("Rule engine stopped")
+        finally:
+            log_event("Rule engine stopped", self.log_path)
 
 
 class Rule:
@@ -78,21 +83,27 @@ class Rule:
 
         return False
 
-    def execute(self):
+    def execute(self, log_path=None):
         """Execute rule actions sequentially."""
         if self.has_run:
             return
+        log_event(f"Executing rule: {self.name}", log_path)
         for action in self.actions:
             if 'launch' in action:
                 subprocess.Popen(action['launch'], shell=True)
+                log_event(f"launch -> {action['launch']}", log_path)
             elif 'kill' in action:
                 for p in psutil.process_iter(['name']):
                     if p.info['name'] == action['kill']:
                         p.terminate()
+                log_event(f"kill -> {action['kill']}", log_path)
             elif 'wait' in action:
                 time.sleep(action['wait'])
+                log_event(f"wait -> {action['wait']}", log_path)
 
             elif 'notify' in action:
                 send_notification(action['notify'])
+                log_event(f"notify -> {action['notify']}", log_path)
 
+        log_event(f"Finished rule: {self.name}", log_path)
         self.has_run = True
