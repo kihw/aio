@@ -1,8 +1,11 @@
 import subprocess
 import time
+
+import datetime
 import psutil
 
-from utils.system import is_process_running
+from utils.system import is_process_running, get_battery_percent, send_notification
+
 
 
 class RuleEngine:
@@ -33,8 +36,12 @@ class Rule:
 
     def check_triggers(self) -> bool:
         """Return True if rule triggers are satisfied."""
+
+        if self.has_run:
+            return False
         if not self.triggers:
-            return not self.has_run
+            return True
+
 
         for trig in self.triggers:
             if 'app_start' in trig:
@@ -43,6 +50,17 @@ class Rule:
             if 'app_exit' in trig:
                 if not is_process_running(trig['app_exit']):
                     return True
+
+            if 'at_time' in trig:
+                target = trig['at_time']
+                now = datetime.datetime.now().strftime('%H:%M')
+                if now == target:
+                    return True
+            if 'battery_below' in trig:
+                level = get_battery_percent()
+                if level is not None and level < float(trig['battery_below']):
+                    return True
+
 
         return False
 
@@ -59,4 +77,8 @@ class Rule:
                         p.terminate()
             elif 'wait' in action:
                 time.sleep(action['wait'])
+
+            elif 'notify' in action:
+                send_notification(action['notify'])
+
         self.has_run = True

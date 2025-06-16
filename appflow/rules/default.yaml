@@ -1,7 +1,9 @@
 - name: Sample Workflow
   triggers:
     - app_start: "example.exe"
+    - at_time: "18:00"
   actions:
     - launch: "notepad.exe"
     - wait: 2
+    - notify: "Notepad launched"
     - kill: "calc.exe"

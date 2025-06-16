@@ -84,10 +84,12 @@ L'interface est une app Electron avec React (ou Vue/Svelte selon choix). Elle co
 - name: Dev Workflow
   triggers:
     - app_start: "code.exe"
+    - battery_below: 20
+    - at_time: "22:00"
   actions:
     - launch: "localhost_server.bat"
-    - launch: "spotify.exe"
     - wait: 5
+    - notify: "Server launched"
     - kill: "discord.exe"
 ```
 
