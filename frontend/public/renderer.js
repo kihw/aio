@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { ipcRenderer } = require('electron');
 const yaml = require('js-yaml');
 
 function loadRules() {
@@ -26,12 +27,67 @@ function renderRules(rules) {
   list.innerHTML = '';
   for (const r of rules) {
     const li = document.createElement('li');
-    li.textContent = r.name || 'Unnamed rule';
+    const btn = document.createElement('button');
+    btn.textContent = r.name || 'Unnamed rule';
+    btn.addEventListener('click', () => {
+      if (r.name) {
+        ipcRenderer.send('run-rule', r.name);
+      }
+    });
+    li.appendChild(btn);
     list.appendChild(li);
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  refreshRules();
+  renderLog();
+  setInterval(renderLog, 2000);
+  setInterval(refreshRules, 5000);
+  const logBtn = document.getElementById('refresh-log');
+  if (logBtn) {
+    logBtn.addEventListener('click', renderLog);
+  }
+  const rulesBtn = document.getElementById('refresh-rules');
+  if (rulesBtn) {
+    rulesBtn.addEventListener('click', refreshRules);
+  }
+  const startBtn = document.getElementById('start-engine');
+  const stopBtn = document.getElementById('stop-engine');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => ipcRenderer.invoke('start-engine'));
+  }
+  if (stopBtn) {
+    stopBtn.addEventListener('click', () => ipcRenderer.invoke('stop-engine'));
+  }
+  ipcRenderer.invoke('engine-status').then(updateEngineButtons);
+  ipcRenderer.on('engine-status-changed', (_e, running) => updateEngineButtons(running));
+});
+
+function refreshRules() {
   const rules = loadRules();
   renderRules(rules);
-});
+}
+
+function updateEngineButtons(running) {
+  const startBtn = document.getElementById('start-engine');
+  const stopBtn = document.getElementById('stop-engine');
+  if (startBtn) startBtn.disabled = running;
+  if (stopBtn) stopBtn.disabled = !running;
+  const stateEl = document.getElementById('engine-state');
+  if (stateEl) stateEl.textContent = running ? ' (en cours)' : ' (arrêté)';
+}
+
+function loadLog() {
+  const logPath = path.resolve(__dirname, '../../appflow.log');
+  if (!fs.existsSync(logPath)) {
+    return '';
+  }
+  return fs.readFileSync(logPath, 'utf8');
+}
+
+function renderLog() {
+  const pre = document.getElementById('log');
+  if (!pre) return;
+  pre.textContent = loadLog();
+}

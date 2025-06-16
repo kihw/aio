@@ -7,7 +7,17 @@
 <body>
   <h1>Welcome to AppFlow</h1>
   <h2>Règles disponibles</h2>
+  <p>Cliquez sur une règle pour l'exécuter</p>
+  <button id="refresh-rules">Actualiser la liste</button>
   <ul id="rules"></ul>
+
+  <button id="start-engine">Démarrer l'automatisation</button>
+  <button id="stop-engine">Arrêter</button>
+  <span id="engine-state"></span>
+
+  <h2>Logs</h2>
+  <button id="refresh-log">Actualiser</button> <span id="auto-note">(mise à jour auto)</span>
+  <pre id="log" style="white-space: pre-wrap; background: #eee; padding: 10px; max-height: 200px; overflow: auto;"></pre>
 
   <script src="renderer.js"></script>
 </body>
