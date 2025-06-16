@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
+const yaml = require('js-yaml');
 
 // Try to pick a suitable Python executable on all platforms
 const PYTHON_BIN = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
@@ -51,6 +53,24 @@ ipcMain.handle('stop-engine', (event) => {
 
 ipcMain.handle('engine-status', () => {
   return Boolean(engineProcess);
+});
+
+ipcMain.on('save-rule', (event, rule) => {
+  const rulesDir = path.join(__dirname, '../rules');
+  const file = path.join(rulesDir, 'custom.yaml');
+  let data = [];
+  if (fs.existsSync(file)) {
+    try {
+      const content = fs.readFileSync(file, 'utf8');
+      const parsed = yaml.load(content);
+      if (Array.isArray(parsed)) data = parsed;
+    } catch (e) {
+      // ignore
+    }
+  }
+  data.push(rule);
+  fs.writeFileSync(file, yaml.dump(data), 'utf8');
+  event.sender.send('rule-saved');
 });
 
 app.whenReady().then(createWindow);

@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <title>AppFlow</title>
+  <style>
+    .palette { margin: 10px 0; padding: 5px; background: #f0f0f0; }
+    .draggable { display: inline-block; margin: 2px; padding: 4px; background: #ccc; cursor: grab; }
+    .drop-zone { min-height: 50px; border: 2px dashed #888; padding: 5px; margin-top: 10px; }
+  </style>
 </head>
 <body>
   <h1>Welcome to AppFlow</h1>
@@ -14,6 +19,27 @@
   <button id="start-engine">Démarrer l'automatisation</button>
   <button id="stop-engine">Arrêter</button>
   <span id="engine-state"></span>
+
+  <h2>Éditeur de règle (drag & drop)</h2>
+  <input id="rule-name" placeholder="Nom de la règle" />
+  <div id="available-triggers" class="palette">
+    <p>Déclencheurs</p>
+    <div class="draggable" draggable="true" data-type="app_start">app_start</div>
+    <div class="draggable" draggable="true" data-type="app_exit">app_exit</div>
+    <div class="draggable" draggable="true" data-type="at_time">at_time</div>
+    <div class="draggable" draggable="true" data-type="battery_below">battery_below</div>
+    <div class="draggable" draggable="true" data-type="cpu_above">cpu_above</div>
+    <div class="draggable" draggable="true" data-type="network_above">network_above</div>
+  </div>
+  <div id="available-actions" class="palette">
+    <p>Actions</p>
+    <div class="draggable" draggable="true" data-type="launch">launch</div>
+    <div class="draggable" draggable="true" data-type="kill">kill</div>
+    <div class="draggable" draggable="true" data-type="wait">wait</div>
+    <div class="draggable" draggable="true" data-type="notify">notify</div>
+  </div>
+  <div id="rule-builder" class="drop-zone">Glissez les éléments ici</div>
+  <button id="save-rule">Enregistrer la règle</button>
 
   <h2>Logs</h2>
   <button id="refresh-log">Actualiser</button> <span id="auto-note">(mise à jour auto)</span>
