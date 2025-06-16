@@ -13,6 +13,11 @@
 - Interface utilisateur en **Electron**
 - Support des **profils d’usage** (travail, gaming, repos, etc.)
 - Historique et logs d'exécution
+- Consultation des logs dans l'interface (rafraîchissement auto)
+- Lancement manuel des règles depuis l'interface
+- Démarrage et arrêt du moteur depuis l'interface
+- Affichage de l'état du moteur dans l'interface
+- Rafraîchissement de la liste des règles depuis l'interface
 
 ---
 
@@ -75,6 +80,10 @@ L'interface est une app Electron avec React (ou Vue/Svelte selon choix). Elle co
 
 * une API Flask locale
 * ou une communication IPC via Node bindings (ex: `python-shell`, `zerorpc`, `child_process`)
+
+Une fois l'application Electron lancée, cliquez sur une règle pour l'exécuter manuellement.
+Utilisez les boutons **Démarrer** et **Arrêter** pour contrôler le moteur.
+La zone de logs se met à jour automatiquement, et le bouton "Actualiser la liste" permet de recharger les règles depuis les fichiers YAML.
 
 ---
 
