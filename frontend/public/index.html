@@ -1,50 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>AppFlow</title>
-  <style>
-    .palette { margin: 10px 0; padding: 5px; background: #f0f0f0; }
-    .draggable { display: inline-block; margin: 2px; padding: 4px; background: #ccc; cursor: grab; }
-    .drop-zone { min-height: 50px; border: 2px dashed #888; padding: 5px; margin-top: 10px; }
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="AppFlow - Gestionnaire intelligent d'applications" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>AppFlow - Gestionnaire intelligent d'applications</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            z-index: 9999;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1890ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Welcome to AppFlow</h1>
-  <h2>Règles disponibles</h2>
-  <p>Cliquez sur une règle pour l'exécuter</p>
-  <button id="refresh-rules">Actualiser la liste</button>
-  <ul id="rules"></ul>
+    <noscript>Vous devez activer JavaScript pour exécuter cette application.</noscript>
 
-  <button id="start-engine">Démarrer l'automatisation</button>
-  <button id="stop-engine">Arrêter</button>
-  <span id="engine-state"></span>
+    <div id="loading">
+        <div class="loader"></div>
+        <h2>AppFlow</h2>
+        <p>Chargement en cours...</p>
+    </div>
 
-  <h2>Éditeur de règle (drag & drop)</h2>
-  <input id="rule-name" placeholder="Nom de la règle" />
-  <div id="available-triggers" class="palette">
-    <p>Déclencheurs</p>
-    <div class="draggable" draggable="true" data-type="app_start">app_start</div>
-    <div class="draggable" draggable="true" data-type="app_exit">app_exit</div>
-    <div class="draggable" draggable="true" data-type="at_time">at_time</div>
-    <div class="draggable" draggable="true" data-type="battery_below">battery_below</div>
-    <div class="draggable" draggable="true" data-type="cpu_above">cpu_above</div>
-    <div class="draggable" draggable="true" data-type="network_above">network_above</div>
-  </div>
-  <div id="available-actions" class="palette">
-    <p>Actions</p>
-    <div class="draggable" draggable="true" data-type="launch">launch</div>
-    <div class="draggable" draggable="true" data-type="kill">kill</div>
-    <div class="draggable" draggable="true" data-type="wait">wait</div>
-    <div class="draggable" draggable="true" data-type="notify">notify</div>
-  </div>
-  <div id="rule-builder" class="drop-zone">Glissez les éléments ici</div>
-  <button id="save-rule">Enregistrer la règle</button>
+    <div id="root"></div>
 
-  <h2>Logs</h2>
-  <button id="refresh-log">Actualiser</button> <span id="auto-note">(mise à jour auto)</span>
-  <pre id="log" style="white-space: pre-wrap; background: #eee; padding: 10px; max-height: 200px; overflow: auto;"></pre>
-
-  <script src="renderer.js"></script>
+    <script>
+        window.onload = function () {
+            // Masquer le loader une fois que l'app est chargée
+            setTimeout(function () {
+                const loadingElement = document.getElementById('loading');
+                if (loadingElement) {
+                    loadingElement.style.opacity = 0;
+                    loadingElement.style.transition = 'opacity 0.5s ease-in-out';
+                    setTimeout(function () {
+                        loadingElement.style.display = 'none';
+                    }, 500);
+                }
+            }, 800); // Petit délai pour montrer l'animation même si le chargement est rapide
+        };
+    </script>
 </body>
+
 </html>

@@ -1,10 +1,102 @@
-- name: Sample Workflow
-  triggers:
-    - app_start: "example.exe"
-    - at_time: "18:00"
-    - cpu_above: 80
-    - network_above: 100
-  actions:
-    - notify: "Workflow triggered"
-    - wait: 2
-    - kill: "calc.exe"
+# Configuration des règles par défaut pour AppFlow
+# Ce fichier contient des exemples de règles que vous pouvez utiliser comme base
+
+version: '1.0'
+description: 'Règles par défaut pour AppFlow'
+author: 'AppFlow Team'
+last_modified: '2023-06-24'
+
+# Règles globales appliquées à toutes les applications
+global:
+  restart_on_crash: true
+  notification_level: 'info'  # 'none', 'error', 'warning', 'info', 'all'
+
+# Règles par applications
+rules:
+  - name: 'Navigateur au démarrage'
+    description: 'Lance Chrome au démarrage du système'
+    enabled: true
+    trigger:
+      type: 'system'
+      event: 'startup'
+      delay: 10  # secondes
+    condition:
+      time_range:
+        start: '08:00'
+        end: '20:00'
+      weekday: [1, 2, 3, 4, 5]  # Lundi à Vendredi
+    actions:
+      launch:
+        app: 'chrome'
+        args: ['--start-maximized']
+
+  - name: 'Fermeture des applications en cas de batterie faible'
+    description: 'Ferme les applications gourmandes quand la batterie est faible'
+    enabled: true
+    trigger:
+      type: 'battery'
+      level: 'below'
+      threshold: 15
+    condition:
+      power_connected: false
+    actions:
+      close:
+        apps: ['chrome', 'spotify', 'discord']
+      notify:
+        title: 'Batterie faible'
+        message: 'Applications fermées pour économiser la batterie'
+        level: 'warning'
+
+  - name: 'Auto-démarrage IDE'
+    description: 'Lance VSCode quand le PC est allumé'
+    enabled: false
+    trigger:
+      type: 'system'
+      event: 'startup'
+      delay: 15
+    condition:
+      time_range:
+        start: '09:00'
+        end: '18:00'
+      weekday: [1, 2, 3, 4, 5]
+    actions:
+      launch:
+        app: 'code'
+        args: []
+
+  - name: 'Fermeture de nuit'
+    description: 'Ferme les applications non utilisées la nuit'
+    enabled: true
+    trigger:
+      type: 'time'
+      schedule: '22:30'
+    condition:
+      user_idle: true
+      idle_time: 30  # minutes
+    actions:
+      close:
+        apps: ['spotify', 'discord', 'slack']
+      notify:
+        title: 'Fermeture de nuit'
+        message: 'Applications fermées pour économiser les ressources'
+        level: 'info'
+
+  - name: 'Limitation des ressources'
+    description: 'Limite les applications gourmandes quand le CPU est surchargé'
+    enabled: true
+    trigger:
+      type: 'cpu'
+      level: 'above'
+      threshold: 85
+      duration: 30  # secondes
+    actions:
+      prioritize:
+        target_apps: ['code', 'intellij', 'photoshop']
+        priority: 'high'
+      limit:
+        target_apps: ['chrome', 'spotify', 'discord']
+        priority: 'below_normal'
+      notify:
+        title: 'CPU surchargé'
+        message: 'Ajustement des priorités des applications'
+        level: 'warning'
