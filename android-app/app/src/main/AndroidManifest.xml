@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.remotemouse.android">
+
+    <!-- Permissions réseau pour WebSocket -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    
+    <!-- Permission pour découverte réseau local -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    
+    <!-- Permissions pour maintenir la connexion active -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    
+    <!-- Permission pour vibration (feedback tactile) -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Versions Android supportées -->
+    <uses-sdk 
+        android:minSdkVersion="24" 
+        android:targetSdkVersion="34" />
+
+    <!-- Fonctionnalités requises -->
+    <uses-feature
+        android:name="android.hardware.touchscreen.multitouch"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RemoteMouse"
+        android:name=".RemoteMouseApplication"
+        tools:targetApi="31">
+
+        <!-- Activité principale -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.RemoteMouse.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Activité des paramètres -->
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings_title"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+
+        <!-- Activité de connexion/appairage -->
+        <activity
+            android:name=".ui.ConnectionActivity"
+            android:exported="false"
+            android:label="@string/connection_title"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+
+        <!-- Service de connexion WebSocket -->
+        <service
+            android:name=".service.WebSocketService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+
+        <!-- Service de découverte réseau -->
+        <service
+            android:name=".service.NetworkDiscoveryService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Récepteur pour les changements de connectivité -->
+        <receiver
+            android:name=".receivers.NetworkChangeReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Fournisseur de contenu pour les paramètres -->
+        <provider
+            android:name=".providers.SettingsProvider"
+            android:authorities="com.remotemouse.android.settings"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Configuration du trafic réseau (pour Android 9+) -->
+        <meta-data
+            android:name="android.security.NetworkSecurityConfig"
+            android:resource="@xml/network_security_config" />
+
+    </application>
+
+</manifest>

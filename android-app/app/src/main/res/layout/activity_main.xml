@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_primary"
+    tools:context=".ui.MainActivity">
+
+    <!-- AppBar avec toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenu principal -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Status de connexion -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Indicateur de connexion -->
+                    <View
+                        android:id="@+id/connection_indicator"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/connection_indicator"
+                        android:backgroundTint="@color/status_disconnected" />
+
+                    <!-- Texte de statut -->
+                    <TextView
+                        android:id="@+id/tv_connection_status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/status_disconnected"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <!-- Nom du serveur (si connecté) -->
+                    <TextView
+                        android:id="@+id/tv_server_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:visibility="gone"
+                        tools:text="DESKTOP-ABC123"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Zone trackpad -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/trackpad_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp">
+
+                    <!-- Vue trackpad personnalisée -->
+                    <com.remotemouse.android.ui.TrackpadView
+                        android:id="@+id/trackpad_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="60dp"
+                        app:trackpadBackgroundColor="@color/trackpad_background"
+                        app:trackpadBorderColor="@color/trackpad_border"
+                        app:showVisualFeedback="true" />
+
+                    <!-- Instructions overlay (visible quand non connecté) -->
+                    <LinearLayout
+                        android:id="@+id/trackpad_instructions"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@color/overlay_background"
+                        android:padding="24dp"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginBottom="16dp"
+                            android:src="@drawable/ic_trackpad"
+                            android:contentDescription="@string/trackpad_icon"
+                            app:tint="?attr/colorOnSurfaceVariant" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/trackpad_instructions"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textAlignment="center"
+                            android:gravity="center" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/connect_to_start"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textAlignment="center"
+                            android:gravity="center" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Contrôles principaux -->
+            <LinearLayout
+                android:id="@+id/controls_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Bouton clic gauche -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_left_click"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/left_click"
+                    android:textSize="12sp"
+                    app:icon="@drawable/ic_mouse_left"
+                    app:iconGravity="top"
+                    app:iconSize="20dp" />
+
+                <!-- Bouton clic droit -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_right_click"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/right_click"
+                    android:textSize="12sp"
+                    app:icon="@drawable/ic_mouse_right"
+                    app:iconGravity="top"
+                    app:iconSize="20dp" />
+
+                <!-- Bouton clic milieu -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_middle_click"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/middle_click"
+                    android:textSize="12sp"
+                    app:icon="@drawable/ic_mouse_middle"
+                    app:iconGravity="top"
+                    app:iconSize="20dp" />
+
+            </LinearLayout>
+
+            <!-- Contrôles secondaires -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Bouton clavier -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_keyboard"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/keyboard"
+                    app:icon="@drawable/ic_keyboard"
+                    app:iconGravity="start" />
+
+                <!-- Bouton paramètres rapides -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_quick_settings"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="8dp"
+                    app:icon="@drawable/ic_tune"
+                    android:contentDescription="@string/quick_settings" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- FAB de connexion -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/connect_disconnect"
+        app:srcCompat="@drawable/ic_connect"
+        app:tint="@android:color/white" />
+
+    <!-- Snackbar anchor pour les messages -->
+    <View
+        android:id="@+id/snackbar_anchor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
